@@ -59,9 +59,35 @@ router.get("/", verify, async (req, res) => {
   const query = req.query.new;
   if (req.user.isAdmin) {
     try {
-      const result = query ? await User.find().limit(2) : await User.find();
+      const result = query
+        ? await User.find().sort({ _id: -1 }).limit(2)
+        : await User.find();
       res.status(200).json(result);
     } catch (error) {}
   }
 });
+
+//Get user States
+router.get("/states", async (req, res) => {
+
+  try {
+    const data = await User.aggregate([
+      {
+        $project: {
+          month: { $month: "$createdAt" },
+        },
+      },
+      {
+        $group: {
+          _id: "$month",
+          total: { $sum: 1 },
+        },
+      },
+    ]);
+    res.status(200).json(data)
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 module.exports = router;
