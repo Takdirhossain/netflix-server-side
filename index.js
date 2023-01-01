@@ -7,7 +7,7 @@ const app = express();
 const authreg = require('./routes/auth')
 const updateUser = require('./routes/users')
 const movie = require('./routes/movies')
-const 
+const list = require('./routes/lists')
 const port = process.env.PORT || 5000
 //Milldeware
 app.use(express.json());
@@ -26,6 +26,7 @@ mongoose
 app.use("/api/auth", authreg);
 app.use("/api/user", updateUser);
 app.use("/api/movies", movie);
+app.use("/api/list", list);
 
 app.use('/', (req, res) => {
   res.send("This is server is runing efesf")
